@@ -1,0 +1,106 @@
+---
+description: Web Mastery - Part 2
+title: "Ubuntu Server Setup and Docker Install"
+publishedAt: "2023-07-30"
+showTableOfContents: true
+showAuthor: false
+showDate: true
+showReadingTime: true
+showSummary: true
+summary: "Part two of the web hosting series explains setting up a web server on Ubuntu. It covers installing Ubuntu, Docker Desktop, configuring a static IP address, and testing for CGNAT."
+tags:
+  - containers
+  - docker
+  - ubuntu
+---
+
+## Introduction
+In part two of our web hosting series we will guide you through the process of setting up your own web server using Ubuntu,  we install Docker Desktop and configure a static IP for our server. Additionally, we will explain how to test your network to ensure it is not blocked behind ISP CGNAT (Carrier-Grade Network Address Translation), which could hinder your ability to host a website.
+
+## Installing Ubuntu
+Installing Ubuntu is a straightforward process, and there are numerous guides available online that provide step-by-step instructions. Whether you want to install it on a physical machine or in a virtual environment, you can find comprehensive tutorials on YouTube. For a visual walkthrough, you can check out this video from Learn Linux TV:
+
+{{< youtube f_8cD4HFvhc >}}
+
+For a quick walkthrough on how this is done follow these steps:
+
+1. Download the latest Ubuntu Server ISO from the official [website](https://ubuntu.com/download/desktop).
+2. Create a bootable USB drive with the Ubuntu ISO using tools like Rufus or Etcher.
+3. Enter your computers BIOS and select the bootable drive as the primary boot drive
+4. Boot your computer from the USB drive, follow the on-screen instructions, and complete the installation of Ubuntu Desktop.
+
+## Installing Docker Desktop
+
+Docker is an open-source platform that allows you to develop and run applications inside containers. Containers are lightweight and isolated environments that package all the necessary dependencies required to run an application. In upcoming blog post, we will explore how to use Docker to install Nginx Proxy Manager and Umami for web analytics.
+
+1. Go to the official Docker website and download the latest DEB [package](https://docs.docker.com/desktop/install/ubuntu/#install-docker-desktop).
+
+2. Open a new terminal from the download folder or type the command
+```console
+$ cd Downloads
+```
+
+3. Install the package using the following commands
+```console
+$ sudo apt-get update
+
+$ sudo apt-get install ./docker-desktop-<version>-<arch>.deb
+```
+
+4. After the install is complete type the following command to open Docker Desktop 
+```console
+$ sudo systemctl --user start docker-desktop
+```
+5. You can check the Docker versions by running the following commands:
+```console
+$ docker compose version
+
+$ docker --version
+```
+
+## Setting Up Static IP Addresses
+Static IP addresses are essential for hosting a website because they provide a fixed address for your server or machine. When hosting a website, you want your server's IP address to remain constant so visitors can always reach it without any changes, it also allows the reverse proxy application to forward requests to local services without any hiccups. DHCP (Dynamic Host Configuration Protocol) dynamically assigns IP addresses, and if your server's IP changes, it can lead to website downtime. 
+
+Let's explore how to setup a static IP:
+
+1. Click on the network icon in the top-right corner of the screen.
+
+2. Select "Settings" or "Edit Connections," depending on the version of Ubuntu you are using.
+
+3. In the "Network Connections" window, locate your active network connection (usually Wi-Fi) and click on the gear/settings icon.
+
+4. In the connection settings window, go to the "IPv4" tab.
+
+5. Change the "Method" from "Automatic (DHCP)" to "Manual."
+
+6. In the "Address" field, enter the static IP address you want to assign to your computer (e.g., 192.168.1.10)
+
+7. In the "Netmask" field, enter the subnet mask for your network (e.g., 255.255.255.0 - for Class C subnets).
+
+8. In the "Gateway" field, enter the default gateway IP address (e.g., 192.168.1.1).
+
+9. In the "DNS Servers" field, enter the IP addresses of the DNS servers you want to use (e.g., 8.8.8.8, 8.8.4.4 for Google DNS or 1.1.1.1 for Cloudflare).
+
+10. Click "Apply" or "Save" to save the changes.
+
+11. Restart your network connection to apply the static IP configuration.
+
+After following these steps, your Ubuntu Desktop will have a static IP address, which means it will always use the same IP when connecting to your local network. Make sure to choose an IP address that is not already in use by other devices on your network to avoid conflicts.
+
+## Testing for CGNAT
+CGNAT is used by some ISPs to conserve public IP addresses and share a single public IP address among multiple users. This can cause issues when hosting a website because your server will not have a unique public IP address, making it unreachable from the internet.
+
+To test for CGNAT, you can use online tools like ["icanhazip"](https://icanhazip.com/) to check your public IP address. Make a note of this IP address.
+
+Open a new terminal with the shortcut ` Ctrl + Alt + T `
+
+Run the command traceroute "your-ip"
+```console
+$ traceroute your-ip
+```
+
+> install traceroute with "sudo apt install traceroute"
+
+To confirm there isnt an extra NAT layer, look for only 1 hop - If theres more than 1 hop then you cannot set that IP for any your self-hosted services.
+
+![image](https://pub-b5c6aadb67354fe7a22eab542f04703f.r2.dev/terminal.png)
