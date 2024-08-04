@@ -1,20 +1,15 @@
-FROM node:20-alpine AS base
+FROM node:20.16.0-alpine3.20 AS base
 
 FROM base AS builder
 
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN npm install
 COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
-
-ARG TABLE_NAME
-ARG RECAPTCHA_SECRET
-ARG NEXT_PUBLIC_RECAPTCHA_SITE_KEY
-ARG NEXT_PUBLIC_PLANNER_ID
 
 RUN npm run build
 
