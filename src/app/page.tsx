@@ -197,7 +197,7 @@ export default function Page() {
                 </h2>
                 <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   During my time in university, I completed{" "}
-                  {DATA.Certifications.length} professional certifications and I'm currently working on completing ISACA's Information Technology Certified Associate certification.
+                  {DATA.Certifications.length} professional certifications and I&apos;m currently working on completing ISACA&apos;s Information Technology Certified Associate certification.
                 </p>
               </div>
             </div>
