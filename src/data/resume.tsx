@@ -99,7 +99,7 @@ export const DATA = {
     {
       school: "Ghana Institute of Management and Public Administration",
       href: "https://gimpa.edu.gh",
-      degree: "Bachelor's Degree in Information & Communication Technology",
+      degree: "Bachelor's Degree in Information & Communication Technology - 3.59 GPA",
       logoUrl: "/gimpa.png",
       start: "2019",
       end: "2023"

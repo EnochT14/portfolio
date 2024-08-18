@@ -1,0 +1,75 @@
+---
+description: Building Verge - Part 1
+title: "Token Management In Embedded Systems"
+publishedAt: "2024-08-18"
+showTableOfContents: true
+showAuthor: false
+showDate: true
+showReadingTime: true
+showSummary: true
+summary: "First in a series of blog posts about building Verge, this post explains how we securely manage tokens in embedded systems."
+tags:
+  - Arduino
+  - Tokens
+  - HMAC
+---
+
+
+
+### Token Management In Embedded Systems
+
+In IoT applications, secure communication with remote servers often requires the use of access tokens. These tokens authenticate devices and authorize actions. However, tokens have expiration times, necessitating a mechanism to refresh them without interrupting the device's operation. This is particularly challenging in embedded systems, where resources are limited. At Verge, we employ various encryption techniques to secure token generation and signature creation, ensuring that our servers can verify the integrity of data during transmission. However, some of these methods are computationally intensive, necessitating our efforts to minimize processing demands on the device.
+
+### My Approach to Token Refresh Logic
+
+To tackle this challenge, I architected a token refresh mechanism that ensures seamless operation while minimizing unnecessary network requests without input from our users. Here’s a breakdown:
+
+1. **Token Storage and Initialization**: 
+   I began by securely storing the access and refresh tokens in the device’s non-volatile memory using the Preferences library. This allows the device to retain its authentication state even after a reboot. These values are encrypted before storage, ensuring that they cannot be easily retrieved in their original form.
+
+   ```cpp
+   String accessToken;
+   String refreshToken;
+   ```
+
+2. **Scheduled Token Refresh**:
+   Instead of checking the token status on every loop iteration, I implemented a time-based check. The device checks if the token needs refreshing every 50 minutes, which is a reasonable interval as token expiry is set at 1 hour.
+
+   ```cpp
+   unsigned long lastTokenRefresh = 0;
+   const unsigned long tokenRefreshInterval = 50 * 60 * 1000;
+   ```
+
+3. **Efficient Token Refresh Logic**:
+   In the main loop, I added a conditional statement to refresh the token only if the current time exceeds the last refresh time by the defined interval. This was done to prevent unnecessary refresh attempts and reduces network traffic.
+
+   ```cpp
+   if (now - lastTokenRefresh >= tokenRefreshInterval) {
+       if (refreshAccessToken()) {
+           lastTokenRefresh = now; // Update the last refresh time
+       }
+   }
+   ```
+
+4. **Handling Expired Tokens**:
+   To ensure that the device remains functional even if the access token expires, I included logic to handle HTTP response codes. If a request fails due to an expired token, the device automatically attempts to refresh the token and retries the request.
+
+   ```cpp
+   if (httpResponseCode == 401) { // Token might be expired
+       refreshAccessToken(); // Try refreshing the token
+       // Retry the request with the new token
+   }
+   ```
+
+5. **Robust Authentication**:
+   I also implemented a robust authentication process that securely generates and sends the necessary credentials to the server. This includes signing requests with HMAC to ensure data integrity and authenticity.
+
+   ```cpp
+   String signature = calculateHMAC(dataToSign, someSensitiveData.c_str());
+   ```
+
+### Conclusion
+
+In implementing this token refresh logic ensured our devices could maintain a secure and reliable connection to the server without unnecessary interruptions.
+
+#### First in a series of blog posts about building Verge, this post explains how we securely manage tokens in embedded systems.
