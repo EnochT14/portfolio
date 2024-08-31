@@ -72,7 +72,7 @@ export const DATA = {
   work: [
     {
       company: "Verge Financial Technologies",
-      href: "https://www.vergepay.org",
+      href: "https://vergepay.org",
       badges: [],
       location: "Remote",
       title: "Backend Engineer",
