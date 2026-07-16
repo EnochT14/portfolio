@@ -8,25 +8,26 @@ export const DATA = {
   location: "Accra, Ghana",
   locationLink: "https://www.google.com/maps/place/Accra",
   description:
-    "SWE building scalable backend systems..",
+    "Customer insights pro who still ships code when spreadsheets aren't enough.",
   summary:
-    "Tired of clicking buttons? Me too. That's why I write code to automate and  ̷b̷r̷e̷a̷k̷ things in the name of improvement 👀. Cloud enthusiast, DevOps dabbler and recent grad with a [degree](/#education) in Information & Communication Technology. Looking to join a development team where I can contribute and grow.",
-  avatarUrl: "https://pub-b5c6aadb67354fe7a22eab542f04703f.r2.dev/ec.png",
+    "People person by day, dashboard detective by night. I've led customer experience teams, dug through feedback and KPIs to find what actually moves the needle, and still write code to  ̷b̷r̷e̷a̷k̷ automate the boring stuff 👀. Equal parts coaching, Power BI, and \"why is this SQL query taking forever?\". [ICT grad](/#education) who believes the best insights sit at the intersection of people and data — looking for a team where curiosity, empathy, and clean metrics all get a seat at the table.",
+  avatarUrl: "/ec.png",
   skills: [
+    "Customer Insights",
+    "Market Research",
+    "Javascript",
+    "Power BI",
+    "SQL",
+    "PostgreSQL",
+    "Cybersecurity",
+    "Data Visualization",
+    "Python",
+    "Team Leadership",
+    "Performance Coaching",
+    "Stakeholder Management",
     "Go",
     "Flutter",
-    "ExpressJS",
     "Node.js",
-    "Python",
-    "Postgres",
-    "Docker",
-    "Redis",
-    "Nginx",
-    "Kubernetes",
-    "Git",
-    "Arduino",
-    "Embedded Systems",
-    "Azure",
   ],
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
@@ -71,29 +72,53 @@ export const DATA = {
 
   work: [
     {
+      company: "Concentrix",
+      href: "https://www.concentrix.com",
+      badges: [],
+      location: "Accra, Ghana",
+      title: "Team Lead",
+      logoUrl: "/concentrix.png",
+      start: "Sep 2025",
+      end: "Jul 2026",
+      description:
+        "Led and coached a 22-member customer service team to hit KPI targets (AHT, Call Quality, Adherence, FCR). Used feedback and performance data to drive coaching and service improvements, and earned the \"Game Changer\" Award (April 2026).",
+    },
+    {
+      company: "Concentrix",
+      href: "https://www.concentrix.com",
+      badges: [],
+      location: "Accra, Ghana",
+      title: "Customer Service Advisor - DHL eCommerce",
+      logoUrl: "/concentrix.png",
+      start: "Sep 2024",
+      end: "Sep 2025",
+      description:
+        "Supported customers with high-volume inquiries, achieving a 96% satisfaction rating through empathetic, solutions-focused service.",
+    },
+    {
+      company: "GOIL PLC",
+      badges: [],
+      href: "https://goil.com.gh",
+      location: "Accra, Ghana",
+      title: "Consumer Marketing - National Service",
+      logoUrl: "/goil.jpg",
+      start: "Nov 2023",
+      end: "Sep 2024",
+      description:
+        "Worked with B2B customers on product tailoring and retention, built Power BI dashboards for sales and performance insights, and shipped a Flutter app plus Go automation tool for fuel ordering and notifications.",
+    },
+    {
       company: "Verge Financial Technologies",
       href: "https://vergepay.org",
       badges: [],
-      location: "Remote",
+      location: "Accra, Ghana",
       title: "Backend Engineer",
       logoUrl: "/verge.jpg",
       start: "Aug 2023",
       end: "Present",
       description:
-        "I lead the development of Mobile Money solutions that leverage modern technologies to enhance user experiences and streamline transactions. My primary focus is on creating secure and efficient payment systems that integrate NFC technology for seamless payments, and ensuring robust data security through advanced encryption methods. I also work extensively with embedded systems, utilizing the ESP32 platform, and integrate various APIs to facilitate smooth interactions with our Mobile Money services. My role involves both hardware and software development, ensuring that our products are not only functional but also user-friendly and secure.",
+        "Developed and maintained cloud-native applications using Golang and Node.js, working with MySQL, PostgreSQL, and MongoDB databases. Implemented CI/CD pipelines and containerized infrastructure (Docker, Ansible), supporting reliable, data-consistent application delivery.",
     },
-    {
-      company: "Goil PLC",
-      badges: [],
-      href: "https://goil.com.gh",
-      location: "Accra, Ghana",
-      title: "Software Engineer/Consumer Marketing - NSP",
-      logoUrl: "/goil.jpg",
-      start: "Nov 2023",
-      end: "Oct 2024",
-      description:
-        "During my tenure at Goil PLC, I developed a Flutter application that streamlined the fuel ordering process for our B2B customers. This application allowed customers to place fuel orders receive updates on the delivery process through push notifications. Additionally, the system sent automated emails to remind customers of upcoming invoices. The project was successfully piloted, enhancing customer satisfaction and operational efficiency. Tech stack included Flutter for the mobile and web app, Firebase for backend services, and Express.js/Node.js for serverless functions.",
-    }
   ],
   education: [
     {
@@ -246,71 +271,65 @@ export const DATA = {
   ],
   Certifications: [
     {
+      title: "Fortinet Certified Associate Cybersecurity",
+      dates: "July, 2026",
+      location: "Remote, Fortinet",
+      description:
+        "Earned the Fortinet Certified Associate Cybersecurity credential, covering foundational cybersecurity concepts, threat awareness, and security best practices. Valid through July 2028.",
+      image: "/fortinet.png",
+      links: [
+        {
+          title: "Certification",
+          icon: <Icons.globe className="h-4 w-4" />,
+          href: "https://www.fortinet.com/training/cybersecurity-professionals",
+        },
+      ],
+    },
+    {
       title: "PwC Switzerland - Power BI Job Simulation",
       dates: "May, 2024",
-      location: "Remote",
+      location: "Remote, Forage",
       description:
         "Gained practical experience in using Microsoft Power BI for data visualization and analysis. This simulation involved real-world scenarios where I was tasked with importing and transforming data, creating interactive dashboards, and generating insightful reports. I gained hands-on experience in data modeling, creating visualizations, and using DAX (Data Analysis Expressions) to perform advanced calculations.",
-      image:
-        "/forage.jpg",
+      image: "/forage.jpg",
       links: [
         {
           title: "Certification",
           icon: <Icons.globe className="h-4 w-4" />,
           href: "https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/PwC%20Switzerland/a87GpgE6tiku7q3gu_PwC%20Switzerland_bM5BKWCDBf9iRALWm_1716121255273_completion_certificate.pdf",
-        }
+        },
       ],
     },
     {
-      title: "Oracle Cloud Infrastructure 2023 Certified DevOps Professional ",
+      title: "Oracle Cloud Infrastructure 2023 Certified DevOps Professional",
       dates: "August, 2023",
       location: "Remote, Oracle",
       description:
         "This certification demonstrates my proficiency in implementing and managing DevOps practices using Oracle Cloud Infrastructure (OCI). This certification covers a comprehensive range of topics, including continuous integration and continuous deployment (CI/CD) pipelines, infrastructure as code (IaC) using Terraform, containerization with Docker and Kubernetes, and automation with tools like Ansible. I gained hands-on experience in designing, deploying, and managing scalable and secure cloud-native applications, as well as implementing best practices for monitoring, logging, and security in a DevOps environment.",
       image:
         "https://pub-b5c6aadb67354fe7a22eab542f04703f.r2.dev/oracle.png",
-      win: "",
-      mlh: "",
       links: [
         {
-          title: "OCI Certifcation",
+          title: "OCI Certification",
           icon: <Icons.globe className="h-4 w-4" />,
           href: "https://catalog-education.oracle.com/pls/certview/sharebadge?id=D44B96884C7877FF263BE62B4CB93FB22525C2A76E99011B51019F531F1708C9",
-        }
-      ],
-    },
-    {
-      title: "Oracle Cloud Infrastructure 2023 Certified Foundations Associate",
-      dates: "August, 2023",
-      location: "Remote, Oracle",
-      description:
-        "Successfully completed this certification to demonstrate my proficiency in the foundational concepts and services of Oracle Cloud Infrastructure (OCI). This certification covers Cloud Concepts, Networking and OCI Cloud Architecture.",
-      image:
-        "https://pub-b5c6aadb67354fe7a22eab542f04703f.r2.dev/oracle.png",
-      links: [
-        {
-          title: "OCI Certifcation",
-          icon: <Icons.globe className="h-4 w-4" />,
-          href: "https://catalog-education.oracle.com/pls/certview/sharebadge?id=14267E8F81FF37459AAAD40CEA95BD49185D829D72796AAA5A8881F4254DA21D",
         },
       ],
     },
     {
-      title: " Google Data Analytics",
+      title: "Google Data Analytics Professional Certificate",
       dates: "December, 2022",
       location: "Remote, Coursera",
       description:
         "This certification covers a wide range of topics, including data collection, data cleaning, data analysis, and data visualization. I gained hands-on experience in using tools like Tableau, Google Sheets, and R programming to analyze data and derive meaningful insights. Additionally, I learned about data ethics, data privacy, and the importance of data-driven decision-making.",
-      image:
-        "/coursera.png",
-      mlh: "https://pub-b5c6aadb67354fe7a22eab542f04703f.r2.dev/coursera.png",
+      image: "/coursera.png",
       links: [
         {
           title: "Credly Badge",
           icon: <Icons.globe className="h-4 w-4" />,
           href: "https://www.credly.com/badges/7cadd345-2dc6-4a97-81d8-1fef2084cf07/public_url",
-        }
+        },
       ],
-    }
+    },
   ],
 } as const;

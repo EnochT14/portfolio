@@ -93,11 +93,11 @@ export default function Page() {
           </BlurFade>
           {DATA.work.map((work, id) => (
             <BlurFade
-              key={work.company}
+              key={`${work.company}-${work.title}`}
               delay={BLUR_FADE_DELAY * 6 + id * 0.05}
             >
               <ResumeCard
-                key={work.company}
+                key={`${work.company}-${work.title}`}
                 logoUrl={work.logoUrl}
                 altText={work.company}
                 title={work.company}
@@ -200,8 +200,7 @@ export default function Page() {
                   I enjoy learning new skills
                 </h2>
                 <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  During my time in university, I completed{" "}
-                  {DATA.Certifications.length} professional certifications and I&apos;m currently working on completing ISACA&apos;s Information Technology Certified Associate certification.
+                  I hold {DATA.Certifications.length} professional certifications spanning data analytics, cloud/DevOps, Power BI, and cybersecurity.
                 </p>
               </div>
             </div>
