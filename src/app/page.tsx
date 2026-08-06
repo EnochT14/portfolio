@@ -1,4 +1,5 @@
 import { HackathonCard } from "@/components/hackathon-card";
+import { LiveFromESP } from "@/components/live-esp";
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { ProjectCard } from "@/components/project-card";
@@ -188,9 +189,33 @@ export default function Page() {
           </div>
         </div>
       </section>
-      <section id="Certifications">
+      <section id="live">
         <div className="space-y-12 w-full py-12">
           <BlurFade delay={BLUR_FADE_DELAY * 13}>
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
+                  Live
+                </div>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+                  Live from my home server
+                </h2>
+                <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  An ESP32 in my apartment reads the sensors, tracks the
+                  aircraft overhead, and serves this data straight from the
+                  chip — no cloud backend.
+                </p>
+              </div>
+            </div>
+          </BlurFade>
+          <BlurFade delay={BLUR_FADE_DELAY * 14}>
+            <LiveFromESP />
+          </BlurFade>
+        </div>
+      </section>
+      <section id="Certifications">
+        <div className="space-y-12 w-full py-12">
+          <BlurFade delay={BLUR_FADE_DELAY * 15}>
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
@@ -205,12 +230,12 @@ export default function Page() {
               </div>
             </div>
           </BlurFade>
-          <BlurFade delay={BLUR_FADE_DELAY * 14}>
+          <BlurFade delay={BLUR_FADE_DELAY * 16}>
             <ul className="mb-4 ml-4 divide-y divide-dashed border-l">
               {DATA.Certifications.map((project, id) => (
                 <BlurFade
                   key={project.title + project.dates}
-                  delay={BLUR_FADE_DELAY * 15 + id * 0.05}
+                  delay={BLUR_FADE_DELAY * 17 + id * 0.05}
                 >
                   <HackathonCard
                     title={project.title}
@@ -228,7 +253,7 @@ export default function Page() {
       </section>
       <section id="contact">
         <div className="grid items-center justify-center gap-4 px-4 text-center md:px-6 w-full py-12">
-          <BlurFade delay={BLUR_FADE_DELAY * 16}>
+          <BlurFade delay={BLUR_FADE_DELAY * 18}>
             <div className="space-y-3">
               <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
                 Contact

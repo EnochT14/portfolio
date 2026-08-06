@@ -271,6 +271,21 @@ export const DATA = {
   ],
   Certifications: [
     {
+      title: "Fortinet NSE 3 Certified in Cybersecurity",
+      dates: "July, 2026",
+      location: "Remote, Fortinet",
+      description:
+        "Earned the Fortinet NSE 3 certification in cybersecurity, demonstrating a deeper understanding of security operations, threat landscape, and protective solutions across the Fortinet portfolio.",
+      image: "/fortinet.png",
+      links: [
+        {
+          title: "Certification",
+          icon: <Icons.globe className="h-4 w-4" />,
+          href: "https://www.fortinet.com/training/cybersecurity-professionals",
+        },
+      ],
+    },
+    {
       title: "Fortinet Certified Associate Cybersecurity",
       dates: "July, 2026",
       location: "Remote, Fortinet",
