@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
+import Script from "next/script";
 //import { Inter as FontSans } from "next/font/google";
 import { Bricolage_Grotesque as FontSans } from "next/font/google";
 import "./globals.css";
@@ -62,6 +63,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
+        <Script defer src="https://umami.ecobbina.work/script.js" data-website-id="a70bb24b-4c1b-40ae-83fa-61374dc87000" />
         <ThemeProvider attribute="class" defaultTheme="light">
           <TooltipProvider delayDuration={0}>
             {children}

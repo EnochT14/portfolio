@@ -1,0 +1,87 @@
+---
+description: Building the ESP32 home server - Part 1
+title: "Running a Website From an ESP32"
+publishedAt: "2026-08-06"
+showTableOfContents: true
+showAuthor: false
+showDate: true
+showReadingTime: true
+showSummary: true
+summary: "How we turned a 4MB-flash ESP32 into a live public website: where the project began as a fork, the changes we made along the way, and where it stands now."
+tags:
+  - ESP32
+  - Embedded
+  - IoT
+  - Cloudflare
+---
+
+## Where we began
+
+The site you can see live at [esp.ecobbina.work](https://esp.ecobbina.work) is served by a single ESP32. Not a server rack, not a Raspberry Pi but a development board with 4MB of flash and about 320KB of usable RAM.
+
+We started from a fork. On 4 August 2026 we forked [HelloESP](https://github.com/Tech1k/helloesp) by Tech1k, a project that already proved a small board could serve a real website to the internet. All credit for the original project goes to them. We took the code, changed what didn't fit our hardware and our network, and pushed it somewhere the original never went.
+
+## The hardware
+
+The board is a DOIT ESP32 DEVKIT V1 (WROOM-32, 4MB flash). It has no SD card slot, so storage had to be solved differently. Connected over the I2C bus (SDA 21, SCL 22) are:
+
+- a GME12864-78 OLED panel (SH1106, 128x64, address 0x3C) that shows live stats and a QR code to the site,
+- a BME280 for temperature, humidity, and pressure,
+- a CCS811 for CO2 and VOC.
+
+A PiAware receiver on the same LAN feeds it aircraft positions. The board has no RTC module. The whole thing is powered by the MTN Fibre router.
+
+## Storage: the SD card never came along
+
+The original project kept logs, stats, and web assets on an SD card. Our board has no SD slot, so we moved everything onto the on-chip flash. The trick was doing it without touching the storage code: the file API for LittleFS is a drop-in superset of the SD usage, so we replaced the SD object itself.
+
+```cpp
+fs::LittleFSFS SD;
+```
+
+Every existing `SD.open(...)` call now writes to flash. The partition table is `no_ota.csv`: 2MB for the firmware, 1.875MB for the filesystem. Web assets are pre-gzipped so everything fits, the homepage is about 27KB over the wire. The application currently sits at 62% of its flash budget.
+
+## Changes we made
+
+### Dumsor tracking without a real-time clock
+
+Ghana's power grid drops the power regularly. We wanted the site to record every outage, including ones that happen while the device itself is dead. There is no RTC on this build, so the device cannot know the wall-clock time while it is powered off. The system clock starts at epoch 0 and is only authoritative after NTP syncs.
+
+The measurement works on a proof-of-life. Every five minutes, while running, the device writes its current epoch to a small file, `/lastseen.txt`. When power comes back, the device boots, waits for NTP to give it a valid clock, and compares the new time against the last known alive time. If the gap is between 90 seconds and 6 months anything smaller is a reboot or NTP jitter, anything larger is nonsense it is counted as an outage.
+
+Each detected outage is appended to `/power_events.csv` on the flash filesystem, one row with three values: when the power went out, when it returned, and the down duration in seconds. The file keeps only the newest 500 rows; older ones are pruned. The counters on the homepage outages this month, total outages, total seconds without power are recomputed from that CSV at boot, so they survive reboots without any extra state.
+
+### I2C pins we could not use
+
+We tried moving the project to a T-Display Keyboard board. GPIO 21 and 22, the stock ESP32 I2C pins are wired to the keyboard rows on that board. The workaround was to make the I2C pins configurable (`I2C_SDA`/`I2C_SCL` macros) and to make the bus-recovery routine clock the configured SCL pin instead of Arduino's default SDA/SCL macros, so it can never drive the keyboard rows. The board itself didn't make the cut; the lesson stayed in the code.
+
+### Live ADS-B aircraft tracking
+
+We run a PiAware receiver on the LAN, and the ESP32 now tracks the aircraft it hears. The receiver exposes a full snapshot of the local airspace as JSON at `/data/aircraft.json` a busy feeder's snapshot can exceed 100KB, and this chip has roughly 180KB of free heap. Downloading it into memory was not an option.
+
+The integration works like this:
+
+1. **Config.** The receiver's URL goes in `config.txt` as `adsb_url` (the default port 8080 is assumed if omitted). `adsb_poll_ms` controls the poll interval, `adsb_max` caps the fleet size, and `adsb_track` accepts a space-separated list of up to 16 aircraft hex codes to follow only specific flights. Leave `adsb_url` blank and the whole feature is disabled.
+
+2. **Streaming parse.** Each poll streams the HTTP body through a hand-rolled JSON state machine. There is no full-body buffer and no per-aircraft `String`: the parser walks the feed token by token, tracks top-level keys and the `aircraft` array, and handles nested objects, escaped strings, and numbers. Only the fields worth keeping hex code, up to 8-character callsign, position, barometric altitude, ground speed, heading, squawk, and category are copied into a fixed array of structs. Aircraft on the ground and aircraft that have gone silent for two minutes are dropped. With `adsb_track` set, everything not on the list is dropped too.
+
+3. **Snapshot semantics.** Every successful poll replaces the fleet wholesale. There is no incremental state to corrupt and no replay logic: if PiAware restarts, the next poll just repopulates the array and the change-detection flag fires.
+
+4. **Delivery.** When the fleet changes, the device serializes it as compact JSON short keys like `hex`, `f`, `lat`, `alt`, `gs`, `trk` and serves it two ways: as `/adsb.json` on the LAN for local viewers, and as `adsb_update` events over the WebSocket to the Cloudflare Worker, which fans them out over SSE to every public viewer. The public `/adsb` page renders the fleet on a Leaflet map with a live table, and the homepage has a count strip. If the receiver is unreachable, the pages self-hide and the poll self-heals.
+
+## How a 4MB board serves the internet
+
+The ESP32 runs the web server itself, over WiFi. It has no public IP, so a [Cloudflare Worker](https://developers.cloudflare.com/workers/) relay (`esp-relay`) sits in front of the site, proxies public requests to the device, and fan-outs live data sensor stats, guestbook events, aircraft positions over SSE to every viewer. The device pushes updates over a single WebSocket to the Worker, which replays the latest state to new connections. Outdoor weather for Oyarifa, Ghana comes from Open-Meteo, fetched and cached by the Worker.
+
+## Where we are now
+
+The site is live, and it does more than the original:
+
+- live indoor and outdoor readings and uptime,
+- an outage card for dumsor events, computed from the power-events log,
+- a guestbook with moderation and built-in translation,
+- a history page with year-grouped records,
+- a console, an admin panel, RSS feeds, and a sitemap,
+- live ADS-B aircraft tracking, streamed to the map page and the homepage strip.
+
+The code lives at [github.com/EnochT14/hello-esp](https://github.com/EnochT14/hello-esp). The device has been up since the relaunch, and the little card at the top of this page is it reading its own sensors, counting its own visitors, and reporting the planes overhead, live.
