@@ -140,6 +140,36 @@ export const DATA = {
   ],
   projects: [
     {
+      title: "ESP32 Home Server",
+      href: "https://esp.ecobbina.work",
+      dates: "Aug 2026",
+      active: true,
+      description:
+        "A website served by a single ESP32 with 4MB of flash. It reads indoor sensors, tracks power outages without a real-time clock, follows aircraft overhead via a local PiAware receiver, and pushes everything to the public internet through a Cloudflare Worker relay over SSE. Forked from [Tech1k's HelloESP](https://github.com/Tech1k/helloesp) and rebuilt for a board with no SD card, no RTC, and no public IP.",
+      technologies: [
+        "ESP32",
+        "C++",
+        "LittleFS",
+        "Cloudflare Workers",
+        "SSE",
+        "ADS-B",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://esp.ecobbina.work",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/EnochT14/hello-esp",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "/esp.png",
+      video: "",
+    },
+    {
       title: "GOIL CMS",
       href: "https://play.google.com/store/apps/details?id=com.enoch.consumer",
       dates: "Dec 2023 - July 2024",
