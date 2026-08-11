@@ -63,7 +63,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <Script defer src="https://umami.ecobbina.work/script.js" data-website-id="a70bb24b-4c1b-40ae-83fa-61374dc87000" />
+        <Script defer src="/script.js" data-website-id="a70bb24b-4c1b-40ae-83fa-61374dc87000" />
         <ThemeProvider attribute="class" defaultTheme="light">
           <TooltipProvider delayDuration={0}>
             {children}
