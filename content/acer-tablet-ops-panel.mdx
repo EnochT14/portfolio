@@ -1,0 +1,62 @@
+---
+description: Putting a rooted 2014 Acer tablet to work - Part 1
+title: "A Dead Tablet Is Now My Server Monitor"
+publishedAt: "2026-09-05"
+showTableOfContents: true
+showAuthor: false
+showDate: true
+showReadingTime: true
+showSummary: true
+summary: "An Acer Iconia A3-A20 from 2014, Android 4.4, 1GB of RAM, broken power button. It now watches my ESP32 and my PiAware receiver and wakes me when either goes down."
+tags:
+  - Android
+  - ADB
+  - Root
+  - ESP32
+  - ADS-B
+  - Homelab
+---
+
+## The tablet
+
+The device is an Acer Iconia Tab 10 A3-A20. MediaTek MT8127, quad Cortex-A7 at 1.3GHz, 1GB of RAM, 16GB of flash, 10.1 inch 1280x800 display. It runs Android 4.4.2 on kernel 3.4.67. Acer never shipped an update for it. The power button does not work.
+
+It was rooted with KingoRoot at some point. I confirmed this over ADB: `which su` returns `/system/bin/su`, `su --version` reports `kingo 141`, the package `kingoroot.supersu` is installed with `KingoUser.apk` in `/system/app`, and `su -c id` returns `uid=0(root)`. The build itself is stock: `release-keys`, `ro.secure=1`, shell runs as `uid=2000`.
+
+## Debloat
+
+With 1GB of RAM, the stock image leaves little room. I disabled 48 system packages with `pm disable` as root. Nothing was uninstalled, so everything is reversible with `pm enable`. The list: CloudPrint, Street View, Zinio, eBay carrier apps, Acer Store, demo video, OfficeSuite trial, all live wallpapers, extra IMEs, TalkBack, FaceLock, MTK logger and test apps, factory test apps, dead OTA updaters, Acer float apps, stock Email, PrintSpooler. Chrome and DeskClock were disabled first, then re-enabled when they turned out to be load bearing. The tablet survived a reboot with all of it intact.
+
+There are no custom ROMs for this model. The XDA threads cover stock restore images only. So stock it is.
+
+## The broken power button
+
+`adb reboot` replaced the power button for restarts. For daily use, the key layout already had the answer: `/system/usr/keylayout/mtk-kpd.kl` maps both volume keys with `WAKE_DROPPED`, which means pressing volume wakes the screen without changing the volume. No edit needed. Screen off is handled by apps and shell commands instead.
+
+## The dashboard
+
+The tablet sits on the same LAN as two things: my ESP32 home server at `192.168.100.60` and my PiAware receiver at `192.168.100.2:8080`. I wrote a single local HTML file, `/sdcard/ops-dashboard.html`, that rotates an iframe between four views every 90 seconds: ESP home, the PiAware SkyAware map, the ESP console feed, and ESP stats. Big touch buttons jump directly. No CDN, no frameworks, ES5 only. It was built for the browsers this tablet can actually run.
+
+## The browser problem
+
+The stock browser is Chrome 40 from 2015. The ESP pages loaded as outlines with no data. The cause: the site JavaScript uses modern syntax (13 ES6 constructs in `index.html` alone) that Chrome 40 cannot parse, so the scripts die and the data never renders.
+
+The fix is Firefox 68, the last version Mozilla built for KitKat, installed from the official archive (`fennec-68.11.0.multi.android-arm.apk`). I verified with screenshots: the ESP homepage renders all live sensor tiles, and the SkyAware map renders tiles, range rings over Accra, and the aircraft table. The dashboard now opens in Firefox so its iframes use the Gecko engine.
+
+## The watchdog and the spotter
+
+Two shell scripts run as root under `nohup`:
+
+**watchdog.sh** pings the ESP32 and the Ubuntu server every 5 minutes and logs to `/sdcard/watchdog.log`. On a down transition it wakes the screen and fires a stock DeskClock alarm through the `SET_ALARM` intent, which was the only working audio path: this build has no `stagefright` or `tinyplay` binary. One alarm per outage, recoveries logged.
+
+**spotter.sh** polls PiAware's `aircraft.json` every 60 seconds and compares hex codes against a seen database. A new hex wakes the screen, fires an alarm, and logs the callsign. Alarms are capped at one per 10 minutes. It polls PiAware directly, not the ESP, so the microcontroller with 520KB of RAM never notices.
+
+One real bug surfaced: the tablet's 2013 busybox has a broken `grep -x` that never matches, which caused repeat alerts for known aircraft. Anchored regex (`^hex$`) fixed it.
+
+## SSH
+
+ConnectBot 1.9.8, the last release supporting Android 4.0, sideloaded from F-Droid. The Ubuntu server runs OpenSSH 8.9, confirmed from the tablet. An `ssh://` intent opens the session directly. There is no Play Store on the tablet, so everything arrives via `adb install`.
+
+## What it does now
+
+The tablet stays on charger with stay-awake-while-plugged set, volume buttons for wake, Firefox rotating the dashboard, watchdog and spotter running underneath. Total cost: zero. It was e-waste with a broken button. Now it is the screen I look at first.
