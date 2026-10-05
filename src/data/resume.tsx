@@ -1,10 +1,189 @@
 import { Icons } from "@/components/icons";
 import {  HomeIcon, NotebookIcon, HammerIcon, FolderKanban, MessageCircleMore, CodeXmlIcon } from "lucide-react";
+import type { ReactNode } from "react";
+
+type Project = {
+  title: string;
+  href?: string;
+  dates: string;
+  active: boolean;
+  description: string;
+  technologies: string[];
+  links?: {
+    type: string;
+    href: string;
+    icon: ReactNode;
+  }[];
+  image?: string;
+  video?: string;
+};
+
+const projects: Project[] = [
+  {
+    title: "ESP32 Home Server",
+    href: "https://esp.ecobbina.work",
+    dates: "Aug 2026",
+    active: true,
+    description:
+      "A website served by a single ESP32 with 4MB of flash. It reads indoor sensors, tracks power outages without a real-time clock, follows aircraft overhead via a local PiAware receiver, and pushes everything to the public internet through a Cloudflare Worker relay over SSE. Forked from [Tech1k's HelloESP](https://github.com/Tech1k/helloesp) and rebuilt for a board with no SD card, no RTC, and no public IP.",
+    technologies: [
+      "ESP32",
+      "C++",
+      "LittleFS",
+      "Cloudflare Workers",
+      "SSE",
+      "ADS-B",
+    ],
+    links: [
+      {
+        type: "Website",
+        href: "https://esp.ecobbina.work",
+        icon: <Icons.globe className="size-3" />,
+      },
+      {
+        type: "Source",
+        href: "https://github.com/EnochT14/hello-esp",
+        icon: <Icons.github className="size-3" />,
+      },
+    ],
+    image: "/esp.png",
+    video: "",
+  },
+  {
+    title: "GOIL CMS",
+    href: "https://play.google.com/store/apps/details?id=com.enoch.consumer",
+    dates: "Dec 2023 - July 2024",
+    active: true,
+    description:
+      "Mobile and Web Application built in Flutter for B2B customers to make fuel orders. Additional functionality developed in ExpressJS and hosted on GCP Cloud Functions [GOIL CMS WEB](https://goilcms.web.app/).",
+    technologies: [
+      "Flutter",
+      "Express.js",
+      "PostgreSQL",
+      "GCP Cloud Functions",
+      "Node.js",
+      "Mailgun",
+    ],
+    links: [
+      {
+        type: "Website",
+        href: "https://play.google.com/store/apps/details?id=com.enoch.consumer",
+        icon: <Icons.globe className="size-3" />,
+      },
+    ],
+    image: "",
+    video:
+      "https://pub-b5c6aadb67354fe7a22eab542f04703f.r2.dev/cms.mp4",
+  },
+  {
+    title: "GeoBlitz",
+    href: "https://hono-cloudflare-fastapi.pages.dev/",
+    dates: "Feb 2024 - April 2024",
+    active: true,
+    description:
+      "Designed and developed a High Performance, Globally Distributed API with Redis, Hono, Cloudflare & Next.js.",
+    technologies: [
+      "Next.js",
+      "Typescript",
+      "Hono",
+      "Redis",
+      "Cloudflare"
+    ],
+    links: [
+      {
+        type: "Website",
+        href: "https://hono-cloudflare-fastapi.pages.dev/",
+        icon: <Icons.globe className="size-3" />,
+      },
+      {
+        type: "Source",
+        href: "https://github.com/EnochT14/hono-cloudflare_fastapi",
+        icon: <Icons.github className="size-3" />,
+      },
+    ],
+    image: "",
+    video: "https://pub-b5c6aadb67354fe7a22eab542f04703f.r2.dev/geoblitz.mp4",
+  },
+  {
+    title: "ReconTools",
+    href: "https://reconciliation.pages.dev/",
+    dates: "June 2024 - July 2024", 
+    active: true,
+    description:
+      "Developed a program to speed up manual reconciliation on customer accounts at GOIL PLC. Implemented an API that performs data cleaning and reconciliation entirely in Go and Dockerized for scalability and selfhosting (Hosted on Cloudflare Pages)",
+    technologies: [
+      "HTML & CSS",
+      "Go",
+      "Docker",
+      "Cloudflare Workers",
+    ],
+    links: [
+      {
+        type: "Source API",
+        href: "https://github.com/EnochT14/final-recon",
+        icon: <Icons.github className="size-3" />,
+      },
+      {
+        type: "Source Frontend",
+        href: "https://github.com/EnochT14/recon-cloudflare-pages/",
+        icon: <Icons.github className="size-3" />,
+      },
+    ],
+    image: "/recon.png",
+    video: "",
+  },
+  {
+    title: "Firebase Realtime to Sheets",
+    href: "https://github.com/EnochT14/firebase-realtime-to-sheets",
+    dates: "May 2024",
+    active: true,
+    description:
+    "This open source project was built to syncronize data between firebase realtime and google sheets. Essentially CRUD for Google Sheets.",
+    technologies: [
+      "Javascript",
+      "Firebase",
+      "GCP"
+    ],
+    links: [
+      {
+        type: "Source",
+        href: "https://github.com/EnochT14/firebase-realtime-to-sheets",
+        icon: <Icons.github className="size-3" />,
+      },
+    ],
+    image: "/fbase.png",
+    video:
+      "",
+  },
+  {
+    title: "Ghana Civil Aviation Dashboard",
+    href: "https://public.tableau.com/views/GhanaCivilAviationAuthorityDasboard/FlightOperations",
+    dates: "March 2023",
+    active: true,
+    description:
+    "A dashboard was created using Tableau to provide the Ghana Civil Aviation Authority with insights into current market conditions and trends. The goal was to help the authority make informed decisions to improve efficiency, save time, and reduce costs. Vizualization data was obtained from [GCAA](https://www.gcaa.com.gh/web/?p=126) and cleaned using MS Excel & Tableau.",
+    technologies: [
+      "Data Cleaning",
+      "Tableau",
+      "Data Visualization",
+    ],
+    links: [
+      {
+        type: "Website",
+        href: "https://public.tableau.com/views/GhanaCivilAviationAuthorityDasboard/FlightOperations?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link",
+        icon: <Icons.globe className="size-3" />,
+      },
+    ],
+    image: "/dash.png",
+    video:
+      "",
+  }
+];
 
 export const DATA = {
   name: "Enoch Cobbina",
   initials: "EC",
-  url: "https://ecobbina.me",
+  url: "https://www.ecobbina.work",
   location: "Accra, Ghana",
   locationLink: "https://www.google.com/maps/place/Accra",
   description:
@@ -138,167 +317,7 @@ export const DATA = {
       end: "2017",
     }
   ],
-  projects: [
-    {
-      title: "ESP32 Home Server",
-      href: "https://esp.ecobbina.work",
-      dates: "Aug 2026",
-      active: true,
-      description:
-        "A website served by a single ESP32 with 4MB of flash. It reads indoor sensors, tracks power outages without a real-time clock, follows aircraft overhead via a local PiAware receiver, and pushes everything to the public internet through a Cloudflare Worker relay over SSE. Forked from [Tech1k's HelloESP](https://github.com/Tech1k/helloesp) and rebuilt for a board with no SD card, no RTC, and no public IP.",
-      technologies: [
-        "ESP32",
-        "C++",
-        "LittleFS",
-        "Cloudflare Workers",
-        "SSE",
-        "ADS-B",
-      ],
-      links: [
-        {
-          type: "Website",
-          href: "https://esp.ecobbina.work",
-          icon: <Icons.globe className="size-3" />,
-        },
-        {
-          type: "Source",
-          href: "https://github.com/EnochT14/hello-esp",
-          icon: <Icons.github className="size-3" />,
-        },
-      ],
-      image: "/esp.png",
-      video: "",
-    },
-    {
-      title: "GOIL CMS",
-      href: "https://play.google.com/store/apps/details?id=com.enoch.consumer",
-      dates: "Dec 2023 - July 2024",
-      active: true,
-      description:
-        "Mobile and Web Application built in Flutter for B2B customers to make fuel orders. Additional functionality developed in ExpressJS and hosted on GCP Cloud Functions [GOIL CMS WEB](https://goilcms.web.app/).",
-      technologies: [
-        "Flutter",
-        "Express.js",
-        "PostgreSQL",
-        "GCP Cloud Functions",
-        "Node.js",
-        "Mailgun",
-      ],
-      links: [
-        {
-          type: "Website",
-          href: "https://play.google.com/store/apps/details?id=com.enoch.consumer",
-          icon: <Icons.globe className="size-3" />,
-        },
-      ],
-      image: "",
-      video:
-        "https://pub-b5c6aadb67354fe7a22eab542f04703f.r2.dev/cms.mp4",
-    },
-    {
-      title: "GeoBlitz",
-      href: "https://hono-cloudflare-fastapi.pages.dev/",
-      dates: "Feb 2024 - April 2024",
-      active: true,
-      description:
-        "Designed and developed a High Performance, Globally Distributed API with Redis, Hono, Cloudflare & Next.js.",
-      technologies: [
-        "Next.js",
-        "Typescript",
-        "Hono",
-        "Redis",
-        "Cloudflare"
-      ],
-      links: [
-        {
-          type: "Website",
-          href: "https://hono-cloudflare-fastapi.pages.dev/",
-          icon: <Icons.globe className="size-3" />,
-        },
-        {
-          type: "Source",
-          href: "https://github.com/EnochT14/hono-cloudflare_fastapi",
-          icon: <Icons.github className="size-3" />,
-        },
-      ],
-      image: "",
-      video: "https://pub-b5c6aadb67354fe7a22eab542f04703f.r2.dev/geoblitz.mp4",
-    },
-    {
-      title: "ReconTools",
-      href: "https://reconciliation.pages.dev/",
-      dates: "June 2024 - July 2024", 
-      active: true,
-      description:
-        "Developed a program to speed up manual reconciliation on customer accounts at GOIL PLC. Implemented an API that performs data cleaning and reconciliation entirely in Go and Dockerized for scalability and selfhosting (Hosted on Cloudflare Pages)",
-      technologies: [
-        "HTML & CSS",
-        "Go",
-        "Docker",
-        "Cloudflare Workers",
-      ],
-      links: [
-        {
-          type: "Source API",
-          href: "https://github.com/EnochT14/final-recon",
-          icon: <Icons.github className="size-3" />,
-        },
-        {
-          type: "Source Frontend",
-          href: "https://github.com/EnochT14/recon-cloudflare-pages/",
-          icon: <Icons.github className="size-3" />,
-        },
-      ],
-      image: "/recon.png",
-      video: "",
-    },
-    {
-      title: "Firebase Realtime to Sheets",
-      href: "https://github.com/EnochT14/firebase-realtime-to-sheets",
-      dates: "May 2024",
-      active: true,
-      description:
-      "This open source project was built to syncronize data between firebase realtime and google sheets. Essentially CRUD for Google Sheets.",
-      technologies: [
-        "Javascript",
-        "Firebase",
-        "GCP"
-      ],
-      links: [
-        {
-          type: "Source",
-          href: "https://github.com/EnochT14/firebase-realtime-to-sheets",
-          icon: <Icons.github className="size-3" />,
-        },
-      ],
-      image: "/fbase.png",
-      video:
-        "",
-    },
-    {
-      title: "Ghana Civil Aviation Dashboard",
-      href: "https://ecobbina.me/projects/1-gcaa/",
-      dates: "March 2023",
-      active: true,
-      description:
-      "A dashboard was created using Tableau to provide the Ghana Civil Aviation Authority with insights into current market conditions and trends. The goal was to help the authority make informed decisions to improve efficiency, save time, and reduce costs. Vizualization data was obtained from [GCAA](https://www.gcaa.com.gh/web/?p=126) and cleaned using MS Excel & Tableau.",
-      technologies: [
-        "Data Cleaning",
-        "Tableau",
-        "Data Visualization",
-      ],
-      links: [
-        {
-          type: "Website",
-          href: "https://public.tableau.com/views/GhanaCivilAviationAuthorityDasboard/FlightOperations?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link",
-          icon: <Icons.globe className="size-3" />,
-        },
-      ],
-      image: "/dash.png",
-      video:
-        "",
-    }
-  ],
+  projects,
   Certifications: [
     {
       title: "Fortinet NSE 3 Certified in Cybersecurity",
@@ -311,7 +330,7 @@ export const DATA = {
         {
           title: "Certification",
           icon: <Icons.globe className="h-4 w-4" />,
-          href: "https://www.fortinet.com/training/cybersecurity-professionals",
+          href: "https://www.credly.com/badges/a8a7ecfd-c958-4aaf-8915-f49114b2f4df",
         },
       ],
     },
@@ -326,7 +345,7 @@ export const DATA = {
         {
           title: "Certification",
           icon: <Icons.globe className="h-4 w-4" />,
-          href: "https://www.fortinet.com/training/cybersecurity-professionals",
+          href: "https://www.credly.com/badges/7bb097b0-f9eb-4306-b604-3334ef7e3795",
         },
       ],
     },

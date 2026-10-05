@@ -66,3 +66,14 @@ async function getAllPosts(dir: string) {
 export async function getBlogPosts() {
   return getAllPosts(path.join(process.cwd(), "content"));
 }
+
+export async function getBlogPostMetadata() {
+  const contentDir = path.join(process.cwd(), "content");
+  return getMDXFiles(contentDir).map((file) => {
+    const slug = path.basename(file, path.extname(file));
+    const { data: metadata } = matter(
+      fs.readFileSync(path.join(contentDir, `${slug}.mdx`), "utf-8")
+    );
+    return { metadata, slug };
+  });
+}
