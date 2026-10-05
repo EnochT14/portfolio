@@ -10,8 +10,15 @@ import { unified } from "unified";
 type Metadata = {
   title: string;
   publishedAt: string;
+  description: string;
   summary: string;
   image?: string;
+};
+
+type Post = {
+  source: string;
+  metadata: Metadata;
+  slug: string;
 };
 
 function getMDXFiles(dir: string) {
@@ -36,11 +43,17 @@ export async function markdownToHTML(markdown: string) {
   return p.toString();
 }
 
-export async function getPost(slug: string) {
+export async function getPost(slug: string): Promise<Post> {
   const filePath = path.join("content", `${slug}.mdx`);
   let source = fs.readFileSync(filePath, "utf-8");
-  const { content: rawContent, data: metadata } = matter(source);
+  const { content: rawContent, data: frontmatter } = matter(source);
   const content = await markdownToHTML(rawContent);
+  const summary = frontmatter.summary ?? frontmatter.description ?? "";
+  const metadata = {
+    ...frontmatter,
+    summary,
+    description: summary,
+  } as Metadata;
   return {
     source: content,
     metadata,

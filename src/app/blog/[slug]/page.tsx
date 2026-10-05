@@ -10,6 +10,12 @@ export async function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slug }));
 }
 
+function resolveOgImage(image: string | undefined, title: string) {
+  return image
+    ? new URL(image, DATA.url).href
+    : `${DATA.url}/og?title=${encodeURIComponent(title)}`;
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -25,7 +31,7 @@ export async function generateMetadata({
     summary: description,
     image,
   } = post.metadata;
-  let ogImage = image ? `${DATA.url}${image}` : `${DATA.url}/og?title=${title}`;
+  let ogImage = resolveOgImage(image, title);
 
   return {
     title,
@@ -77,9 +83,7 @@ export default async function Blog({
             datePublished: post.metadata.publishedAt,
             dateModified: post.metadata.publishedAt,
             description: post.metadata.summary,
-            image: post.metadata.image
-              ? `${DATA.url}${post.metadata.image}`
-              : `${DATA.url}/og?title=${post.metadata.title}`,
+            image: resolveOgImage(post.metadata.image, post.metadata.title),
             url: `${DATA.url}/blog/${post.slug}`,
             author: {
               "@type": "Person",
